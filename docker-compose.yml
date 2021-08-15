@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  api-icarus-node:
+    container_name: api-icarus-node
+    image: node:14.17-alpine
+    build: .
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    env_file:
+      - .env_example
+

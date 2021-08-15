@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsicarusEntity",
+  "title": "opcoes gerador entitade icarus",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "nome_tabela",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "qual o nome da tabela?(dash_case)"
+    }
+  },
+  "required": ["name"]
+}

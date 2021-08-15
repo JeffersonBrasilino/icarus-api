@@ -1,0 +1,13 @@
+import {
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from "typeorm";
+import {BaseEntity} from "@infrastructure/database/typeorm/core/base-entity/base.entity";
+
+@Entity("<%= name %>")
+export class <%= classify(name) %>Entity extends BaseEntity{
+
+    //adicione os campos da tabela aqui.
+}

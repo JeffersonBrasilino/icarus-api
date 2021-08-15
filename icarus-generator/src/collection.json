@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "entity": {
+      "factory": "./lib/entity/entity.factory#main",
+      "description": "Criar entidades de banco de dados no icarus.",
+      "schema": "./lib/entity/schema.json"
+    },
+    "endpoint": {
+      "factory": "./lib/endpoint/ep.factory#main",
+      "description": "Criar endpoints no icarus.",
+      "schema": "./lib/endpoint/schema.json"
+    }
+  }
+}

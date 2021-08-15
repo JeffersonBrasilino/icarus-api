@@ -1,0 +1,12 @@
+import {BaseRepository} from "@infrastructure/database/typeorm/core/base-repository/base.repository";
+import {I<%= classify(name) %>Repository} from "@infrastructure/database/contracts/repository/I<%= dasherize(name) %>.repository";
+import {<%= classify(name) %>Entity} from "@infrastructure/database/typeorm/entities/<%= dasherize(name) %>/<%= dasherize(name) %>.entity";
+import {getRepository, IsNull, Not} from "typeorm";
+
+export class <%= classify(name) %>Repository extends BaseRepository<<%= classify(name) %>Entity> implements I<%= classify(name) %>Repository {
+    constructor() {
+        super(<%= classify(name) %>Entity);
+    }
+
+    //adicionar metodos de consulta no banco aqui
+}
