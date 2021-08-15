@@ -10,7 +10,12 @@ services:
     entrypoint: ./start-develop.sh
     environment:
       APP_PROD: 'DEVELOP'
-      #APP_DB_NAME: 'teste'
+      APP_DB_CONNECTION_NAME: 'develop'
+    depends_on:
+      - icarus-database
+    networks:
+      - icarus-database
+
   icarus-database:
     container_name: icarus-database
     image: postgres

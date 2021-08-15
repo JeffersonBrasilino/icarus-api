@@ -3,4 +3,6 @@ echo "iniciando app em DESENVOLVIMENTO..."
 
 npm install
 
+npm run migration:run
+
 npm run start:dev

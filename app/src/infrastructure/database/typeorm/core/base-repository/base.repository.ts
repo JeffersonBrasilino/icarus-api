@@ -1,6 +1,7 @@
 import {IbaseRepository} from "@infrastructure/database/contracts/repository/ibase.repository";
 import {getRepository} from "typeorm";
 import {Repository} from "typeorm/repository/Repository";
+import {TypeormConnection} from "@infrastructure/database/typeorm/connection/typeorm.connection";
 
 export abstract class BaseRepository<T> implements IbaseRepository {
     protected constructor(protected entity) {
@@ -9,7 +10,7 @@ export abstract class BaseRepository<T> implements IbaseRepository {
     }
 
     protected baseRepository(): Repository<T> {
-        return getRepository(this.entity);
+        return TypeormConnection.getConnection().getRepository(this.entity);
     }
 
     public getPaginationParams(page: number, perPage?: number) {
