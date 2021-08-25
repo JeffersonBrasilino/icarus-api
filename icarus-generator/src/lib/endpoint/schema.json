@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "SchematicsicarusEndpoint",
-  "title": "opcoes gerador endpoint icarus",
+  "$id": "SchematicsLenusEndpoint",
+  "title": "opcoes gerador endpoint lenus",
   "type": "object",
   "properties": {
     "name": {
@@ -20,7 +20,7 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "qual o caminho do endpoint?(lembrando que tem que ser uma pasta com arquivo 'module') ex: administration/users"
+      "x-prompt": "qual o caminho do endpoint?(caso não passe nada, será criado na raiz 'application')"
     }
   },
   "required": ["name"]

@@ -15,4 +15,38 @@ export class UsersRepository extends BaseRepository<UsersEntity> implements Iuse
             where: {username: username, status: 1}
         });
     }
+
+    findUserToRecoveryPassword(username: string): Promise<UsersEntity> {
+        return this.baseRepository().findOne({
+            //select: ['id'],
+            join: {
+                alias: 'user',
+                innerJoinAndSelect: {
+                    person: 'user.personId',
+                    contacts: 'person.contacts',
+                }
+            },
+            where: (qb) => {
+                qb.where("person.status = '1'")
+                    .andWhere("user.status = '1'")
+                    .andWhere("contacts.main = '1'")
+                    .andWhere("contacts.status = '1'")
+                    .andWhere("(contacts.person_contact_type_id = '1' AND contacts.main = '1' )") //1 - email;
+                    .andWhere('(user.username = :username OR user.password = :username)', {username});
+            },
+        })
+    }
+
+    checkVerificationCodeUserRecoveryPassword(userId: string, verificationCode: string): Promise<UsersEntity> {
+        return this.baseRepository().findOne({
+            select: ['id'],
+            where: [
+                {
+                    id: userId,
+                    status: 1,
+                    verificationCode: verificationCode
+                }
+            ],
+        })
+    }
 }

@@ -9,7 +9,7 @@ export class ApiRoutesRepository extends BaseRepository<ApiRoutesEntity> impleme
     }
 
     async getAllRoutes() {
-        return await getRepository(this.entity).find({
+        return await this.baseRepository().find({
             withDeleted: true
         });
     }

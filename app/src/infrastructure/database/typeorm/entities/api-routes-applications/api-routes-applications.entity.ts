@@ -6,7 +6,7 @@ import {ApplicationsEntity} from "@infrastructure/database/typeorm/entities/appl
 import {ApiRoutesEntity} from "@infrastructure/database/typeorm/entities/api-routes/api-routes.entity";
 import {UsersGroupsPermissionsEntity} from "@infrastructure/database/typeorm/entities/users-groups-permissions/users-groups-permissions.entity";
 
-@Entity("api_routes_applications",{schema:'auth'})
+@Entity("api_routes_applications",{schema:'icarus'})
 export class ApiRoutesApplicationsEntity extends BaseEntity {
 
     //adicione os campos da tabela aqui.

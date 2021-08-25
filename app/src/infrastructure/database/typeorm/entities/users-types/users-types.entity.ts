@@ -6,7 +6,7 @@ import {
 import {BaseEntity} from "@infrastructure/database/typeorm/core/base-entity/base.entity";
 import {UsersTypesUserEntity} from "@infrastructure/database/typeorm/entities/users-types-user/users-types-user.entity";
 
-@Entity("users_types",{schema:"auth"})
+@Entity("users_types",{schema:"icarus"})
 export class UsersTypesEntity extends BaseEntity {
 
     @Column({comment:'nome do tipo de usuario'})

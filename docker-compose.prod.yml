@@ -1,10 +1,10 @@
 version: "3.9"
 services:
-  api-icarus-node-prod:
-    container_name: api-icarus-node-prod
+  api-icarus-prod:
+    container_name: api-icarus-prod
     extends:
       file: docker-compose.yml
-      service: api-icarus-node
+      service: api-icarus
     restart: always
     entrypoint: ./start-prod.sh
     environment:

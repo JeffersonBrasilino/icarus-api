@@ -3,11 +3,12 @@ import {AppModule} from './app.module';
 import * as helmet from 'helmet';
 import {NestExpressApplication} from "@nestjs/platform-express";
 import {ValidationPipe} from "@nestjs/common";
-import {JwtAuthGuard} from "@infrastructure/http/guards/authentication/jwt/jwt-auth.guard";
-import {AuthorizationGuard} from "@infrastructure/http/guards/authorization/authorization.guard";
 import {SwaggerGenerateDocumentation} from "@infrastructure/http/api-docs/swagger-generate.documentation";
 import {SaveRoutesDatabase} from "@core/save-routes-database";
 import {RequestContextMiddleware} from "@infrastructure/http/middlewares/request-context.middleware";
+import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
+import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
+import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/authorization/authorization.guard";
 
 bootstrap();
 
@@ -23,7 +24,8 @@ async function bootstrap() {
 
     /*GUARDAS DE ROTAS DE AUTORIZACAO E AUTENTICAÇÃO*/
     app.useGlobalGuards(
-        new JwtAuthGuard(new Reflector()),
+        new OpenRoutesGuard(new Reflector()),
+        new AuthRoutesGuard(new Reflector()),
         new AuthorizationGuard(new Reflector())
     );
 

@@ -3,12 +3,12 @@ import {BaseEntity} from "@infrastructure/database/typeorm/core/base-entity/base
 import {UsersEntity} from "@infrastructure/database/typeorm/entities/users/users.entity";
 import {UsersGroupsEntity} from "@infrastructure/database/typeorm/entities/users-groups/users-groups.entity";
 
-@Entity({name: 'users_groups_user', schema: 'auth'})
+@Entity({name: 'users_groups_user', schema: 'icarus'})
 export class UsersGroupsUserEntity extends BaseEntity {
     @PrimaryGeneratedColumn({type: "int8"})
     id!: number
 
-    @Column({default:1})
+    @Column({default:0})
     main!: string
 
     @ManyToOne(

@@ -1,11 +1,20 @@
 import {Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res} from "@nestjs/common";
 import {<%= classify(name) %>Service} from "../service/<%= dasherize(name) %>.service";
-import {CreateDto} from "@applications/<%= route %>/dto/create.dto";
+import {Save<%= classify(name) %>Dto} from "@applications/<%= route %>/dto/save-<%= dasherize(name) %>.dto";
 import {ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 
 @ApiTags('<%= classify(name) %>')
 @Controller('<%= route %>')
 @ApiBearerAuth()
+@ApiResponse(
+    {
+        status: 500,
+        content: {
+            json: {example: {status: 500, data: 'houve um problema, tente novamente mais tarde.'}},
+        },
+        description: 'Erro interno.',
+    }
+)
 export class <%= classify(name) %>Controller {
     constructor(private _service: <%= classify(name) %>Service) {
     }
@@ -39,8 +48,8 @@ export class <%= classify(name) %>Controller {
         description: "salva o registro(cadastro) conforme a entidade e a entrada dos dados."
     })
     @Post()
-    async post(@Body() createDto: CreateDto, @Res({passthrough: true}) res) {
-        const result = await this._service.save(createDto);
+    async post(@Body() saveDto: Save<%= classify(name) %>Dto, @Res({passthrough: true}) res) {
+        const result = await this._service.save(saveDto);
         res.status(HttpStatus[result.status]).json(result);
     }
 
@@ -49,8 +58,8 @@ export class <%= classify(name) %>Controller {
         description: "Atualiza o registro(cadastro) conforme a entidade e a entrada dos dados.",
     })
     @Put(':id')
-    async put(@Body() createDto: CreateDto, @Param('id') id: number, @Res({passthrough: true}) res) {
-        const result = await this._service.save(createDto, id);
+    async put(@Body() saveDto: Save<%= classify(name) %>Dto, @Param('id') id: number, @Res({passthrough: true}) res) {
+        const result = await this._service.save(saveDto, id);
         res.status(HttpStatus[result.status]).json(result);
     }
 

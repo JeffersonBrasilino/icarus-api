@@ -8,5 +8,9 @@ export class ApplicationsRepository extends BaseRepository<ApplicationsEntity> i
         super(ApplicationsEntity);
     }
 
-    //adicionar metodos de consulta no banco aqui
+    getApplicationByPublicAndPrivateToken(applicationId: string, applicationToken: string):Promise<ApplicationsEntity> {
+        return this.baseRepository().findOne({
+            where: {publicKey: applicationId, privateKey: applicationToken}
+        })
+    }
 }

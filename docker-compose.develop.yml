@@ -1,16 +1,13 @@
 version: "3.9"
 services:
-  api-icarus-node-dev:
-    container_name: api-icarus-node-dev
+  api-icarus-dev:
+    container_name: api-icarus-dev
     extends:
       file: docker-compose.yml
-      service: api-icarus-node
+      service: api-icarus
     volumes:
       - ./app:/app
     entrypoint: ./start-develop.sh
-    environment:
-      APP_PROD: 'DEVELOP'
-      APP_DB_CONNECTION_NAME: 'develop'
     depends_on:
       - icarus-database
     networks:

@@ -2,9 +2,10 @@ import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {JwtStrategy} from "@infrastructure/http/guards/authentication/jwt/jwt.strategy";
-import {ApplicationsModule} from "@applications/applications.module";
 import {TypeormConnection} from "@infrastructure/database/typeorm/connection/typeorm.connection";
+import {OpenRoutesStrategy} from "@infrastructure/http/guards/open-routes/authentication/open-routes.strategy";
+import {AuthRoutesStrategy} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.strategy";
+import {ApplicationsModule} from "@applications/applications.module";
 
 @Module({
     imports: [
@@ -19,7 +20,8 @@ import {TypeormConnection} from "@infrastructure/database/typeorm/connection/typ
     controllers: [AppController],
     providers: [
         AppService,
-        JwtStrategy
+        OpenRoutesStrategy,
+        AuthRoutesStrategy
     ],
 })
 export class AppModule{

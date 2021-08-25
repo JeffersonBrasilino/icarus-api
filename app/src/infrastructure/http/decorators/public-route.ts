@@ -1,4 +1,12 @@
-import { SetMetadata } from '@nestjs/common';
+import {SetMetadata} from '@nestjs/common';
 
-export const IS_PUBLIC_KEY = 'isPublic';
-export const PublicRoute = () => SetMetadata(IS_PUBLIC_KEY, true);
+/*export const PUBLIC_ROUTE = 'isPublic';
+export const PublicRoute = () => SetMetadata(PUBLIC_ROUTE, true);*/
+interface PublicRouteOptions {
+    checkAppAuthorization: boolean
+}
+
+export const PUBLIC_ROUTE = {checkAppAuthorization: true, active: true};
+export const PublicRoute = (options?: PublicRouteOptions) => {
+    return SetMetadata(PUBLIC_ROUTE, {checkAppAuthorization: options?.checkAppAuthorization ?? true, active: true});
+};

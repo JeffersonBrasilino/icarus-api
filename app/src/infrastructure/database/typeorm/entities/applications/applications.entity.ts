@@ -7,7 +7,7 @@ import {
 import {BaseEntity} from "@infrastructure/database/typeorm/core/base-entity/base.entity";
 import {ApiRoutesApplicationsEntity} from "@infrastructure/database/typeorm/entities/api-routes-applications/api-routes-applications.entity";
 
-@Entity("applications",{schema:'auth'})
+@Entity("applications",{schema:'icarus'})
 export class ApplicationsEntity extends BaseEntity {
 
     //adicione os campos da tabela aqui.

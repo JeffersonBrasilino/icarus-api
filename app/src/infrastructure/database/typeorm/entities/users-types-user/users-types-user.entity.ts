@@ -6,7 +6,7 @@ import {BaseEntity} from "@infrastructure/database/typeorm/core/base-entity/base
 import {UsersEntity} from "@infrastructure/database/typeorm/entities/users/users.entity";
 import {UsersTypesEntity} from "@infrastructure/database/typeorm/entities/users-types/users-types.entity";
 
-@Entity("users_types_user",{schema:"auth"})
+@Entity("users_types_user",{schema:"icarus"})
 export class UsersTypesUserEntity extends BaseEntity {
 
     @ManyToOne(

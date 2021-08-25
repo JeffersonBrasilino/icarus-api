@@ -3,12 +3,12 @@
   "schematics": {
     "entity": {
       "factory": "./lib/entity/entity.factory#main",
-      "description": "Criar entidades de banco de dados no icarus.",
+      "description": "Criar entidades de banco de dados no lenus.",
       "schema": "./lib/entity/schema.json"
     },
     "endpoint": {
       "factory": "./lib/endpoint/ep.factory#main",
-      "description": "Criar endpoints no icarus.",
+      "description": "Criar endpoints no lenus.",
       "schema": "./lib/endpoint/schema.json"
     }
   }

@@ -24,9 +24,9 @@ export function main(options: EntityOptions): Rule {
             throw new SchematicsException(`nome dos endpoints obrigatorio(tudo dando errado conforme esperado).`);
         }
 
-        if (!options.path) {
+        /*if (!options.path) {
             throw new SchematicsException(`path local dos endpoints obrigatorio(tudo dando errado conforme esperado).`);
-        }
+        }*/
 
         return chain([
             mergeWith(generateEndPoint(options)),

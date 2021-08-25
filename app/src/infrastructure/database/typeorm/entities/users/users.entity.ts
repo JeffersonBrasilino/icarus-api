@@ -3,8 +3,9 @@ import {BaseEntity} from "@infrastructure/database/typeorm/core/base-entity/base
 import {UsersGroupsUserEntity} from "@infrastructure/database/typeorm/entities/users-groups-user/users-groups-user.entity";
 import {UsersTypesUserEntity} from "@infrastructure/database/typeorm/entities/users-types-user/users-types-user.entity";
 import {UsersLoginTypesEntity} from "@infrastructure/database/typeorm/entities/users-login-types/users-login-types.entity";
+import {PersonEntity} from "@infrastructure/database/typeorm/entities/person/person.entity";
 
-@Entity({name: 'users', schema: 'auth'})
+@Entity({name: 'users', schema: 'icarus'})
 export class UsersEntity extends BaseEntity {
 
     @Column({type: "varchar"})
@@ -13,7 +14,8 @@ export class UsersEntity extends BaseEntity {
     @Column({type: "varchar"})
     password!: string
 
-    @Column({name: 'person_id', nullable: true})
+    @ManyToOne(()=>PersonEntity, p=>p.id)
+    @JoinColumn({name: 'person_id'})
     personId!: number
 
     @Column({name: 'verification_code', nullable: true})
@@ -38,4 +40,5 @@ export class UsersEntity extends BaseEntity {
     )
     @JoinColumn({name: 'users_login_type_id'})
     loginType!: UsersLoginTypesEntity;
+
 }
