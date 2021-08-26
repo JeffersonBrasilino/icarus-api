@@ -1,6 +1,6 @@
 {
   "name": "@icarus/generator",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "gerador do icarus - api",
   "main": "dist/index.js",
   "files": [

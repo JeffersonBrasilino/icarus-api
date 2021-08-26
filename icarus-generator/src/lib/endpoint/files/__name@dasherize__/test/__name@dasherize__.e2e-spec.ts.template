@@ -5,7 +5,7 @@ import {<%= classify(name) %>Module} from "@applications/<%= route %>/<%= dasher
 
 let app: INestApplication;
 let token!: string;
-const mockUsersRepo = {
+const mockRepo = {
     list: (page, filter) => {
         if (filter.username == 'aquiebr')
             return {rows: null};
@@ -30,12 +30,15 @@ const mockUsersRepo = {
     }
 };
 
+//dados do GET E POST
+const requestData = {};
+
 beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
         imports: [<%= classify(name) %>Module],
     })
         //.overrideProvider('IUsersRepository') para mockar os repositorios usar isso, eis o ex.
-        //.useValue(mockUsersRepo)
+        //.useValue(mockRepo)
         .compile();
 
     app = moduleFixture.createNestApplication();
@@ -100,12 +103,7 @@ describe('SAVE users(e2e)', () => {
     it('quando tentar salvar os dados com dados enviados, retorna 201', () => {
         return request(app.getHttpServer())
             .post('/<%= route %>')
-            .send({
-                username: "teste 2",
-                password: "huehue",
-                personId: 1,
-                loginType: 1
-            })
+            .send(requestData)
             .set('Authorization', `Bearer ${token}`)
             .set('Accept', 'application/json')
             .expect(201)
@@ -127,12 +125,7 @@ describe('UPDATE users(e2e)', () => {
     it('quando tentar atualizar os dados com dados enviados, retorna 200', () => {
         return request(app.getHttpServer())
             .put('/<%= route %>/3')
-            .send({
-                username: "teste 2",
-                password: "huehue",
-                personId: 1,
-                loginType: 1
-            })
+            .send(requestData)
             .set('Authorization', `Bearer ${token}`)
             .set('Accept', 'application/json')
             .expect(200)

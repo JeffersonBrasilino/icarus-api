@@ -2,21 +2,14 @@ import {Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res}
 import {<%= classify(name) %>Service} from "../service/<%= dasherize(name) %>.service";
 import {Save<%= classify(name) %>Dto} from "@applications/<%= route %>/dto/save-<%= dasherize(name) %>.dto";
 import {ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {BaseController} from "@core/base-application/base.controller";
 
 @ApiTags('<%= classify(name) %>')
 @Controller('<%= route %>')
 @ApiBearerAuth()
-@ApiResponse(
-    {
-        status: 500,
-        content: {
-            json: {example: {status: 500, data: 'houve um problema, tente novamente mais tarde.'}},
-        },
-        description: 'Erro interno.',
-    }
-)
-export class <%= classify(name) %>Controller {
+export class <%= classify(name) %>Controller extends BaseController{
     constructor(private _service: <%= classify(name) %>Service) {
+        super(_service)
     }
 
     @ApiOperation({
@@ -26,10 +19,7 @@ export class <%= classify(name) %>Controller {
     @ApiQuery({name: 'page', description: 'numero da pagina(paginacao)', required: false})
     @Get()
     async list(@Query() query, @Res({passthrough: true}) res) {
-        const page = query.page ?? 1;
-        delete query.page;
-        const result = await this._service.list(page, query);
-        res.status(HttpStatus[result.status]).json(result);
+        await super.list(query, res);
     }
 
     @ApiOperation({
@@ -39,8 +29,7 @@ export class <%= classify(name) %>Controller {
     @ApiParam({name: 'id', description: 'ID a ser consultado'})
     @Get(':id')
     async get(@Param('id',) id: number, @Res({passthrough: true}) res) {
-        const result = await this._service.get(id);
-        res.status(HttpStatus[result.status]).json(result);
+        await super.get(id, res);
     }
 
     @ApiOperation({
@@ -49,8 +38,7 @@ export class <%= classify(name) %>Controller {
     })
     @Post()
     async post(@Body() saveDto: Save<%= classify(name) %>Dto, @Res({passthrough: true}) res) {
-        const result = await this._service.save(saveDto);
-        res.status(HttpStatus[result.status]).json(result);
+        await super.post(saveDto, res);
     }
 
     @ApiOperation({
@@ -59,8 +47,7 @@ export class <%= classify(name) %>Controller {
     })
     @Put(':id')
     async put(@Body() saveDto: Save<%= classify(name) %>Dto, @Param('id') id: number, @Res({passthrough: true}) res) {
-        const result = await this._service.save(saveDto, id);
-        res.status(HttpStatus[result.status]).json(result);
+        await super.put(saveDto, id, res);
     }
 
     @ApiOperation({
@@ -69,7 +56,6 @@ export class <%= classify(name) %>Controller {
     })
     @Delete(':id')
     async delete(@Param('id') id: number, @Res({passthrough: true}) res) {
-        const result = await this._service.delete(id);
-        res.status(HttpStatus[result.status]).json(result);
+        await super.delete(id, res);
     }
 }

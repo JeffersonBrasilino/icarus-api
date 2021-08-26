@@ -4,11 +4,11 @@ import * as helmet from 'helmet';
 import {NestExpressApplication} from "@nestjs/platform-express";
 import {ValidationPipe} from "@nestjs/common";
 import {SwaggerGenerateDocumentation} from "@infrastructure/http/api-docs/swagger-generate.documentation";
-import {SaveRoutesDatabase} from "@core/save-routes-database";
 import {RequestContextMiddleware} from "@infrastructure/http/middlewares/request-context.middleware";
 import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
 import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
 import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/authorization/authorization.guard";
+import {SaveRoutesDatabase} from "@infrastructure/http/core/save-routes-database";
 
 bootstrap();
 

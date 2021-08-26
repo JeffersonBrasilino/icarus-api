@@ -3,8 +3,9 @@ import {
     EventSubscriber, getRepository,
     UpdateEvent
 } from "typeorm";
-import {RequestContext} from "@core/request-context";
+
 import {LogDatabaseEntity} from "@infrastructure/database/typeorm/entities/log-database/log-database.entity";
+import {RequestContext} from "@infrastructure/http/core/request-context";
 
 @EventSubscriber()
 export class DatabaseLogSubscriber implements EntitySubscriberInterface {

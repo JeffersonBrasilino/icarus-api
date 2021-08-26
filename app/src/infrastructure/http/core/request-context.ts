@@ -9,7 +9,7 @@ import JwtSettings from "@infrastructure/http/settings/jwt.settings";
 export class RequestContext {
 
     public static setRequestContext(name: string, value: any) {
-        const namespace = getNamespace('dbnamespace') || createNamespace('dbnamespace');
+        const namespace = getNamespace('lenus.dbnamespace') || createNamespace('lenus.dbnamespace');
 
         namespace.run(() => {
             namespace.set(name, value);
@@ -17,7 +17,7 @@ export class RequestContext {
     }
 
     public static currentRequestContext() {
-        let namespace = getNamespace('dbnamespace');
+        let namespace = getNamespace('lenus.dbnamespace');
         return namespace.get('curreq');
     }
 
