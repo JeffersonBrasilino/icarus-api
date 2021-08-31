@@ -46,16 +46,22 @@ export abstract class BaseRepository<T> implements IbaseRepository {
     }
 
     async delete(data: number | string | object, soft: boolean = true): Promise<any> {
+        //verifica se o registro existe no banco
+        const conditionFind = ['number', 'string'].indexOf(typeof data) !== -1 ? {id: data} : data
+        const reg = await this.baseRepository().findOne(conditionFind);
+        if (reg) {
+            //atualiza status para disparar o subs de updated e salvar o log no banco.
+            if (typeof data !== "object") {
+                await this.baseRepository().save({id: data, status: 0} as object);
+            }
 
-        //atualiza status para disparar o subs de updated e salvar o log no banco.
-        if (typeof data !== "object") {
-            await this.baseRepository().save({id: data, status: '0'} as object);
-        }
-
-        if (soft === true) {
-            return await this.baseRepository().softDelete(data);
+            if (soft === true) {
+                return await this.baseRepository().softDelete(data);
+            } else {
+                return await this.baseRepository().delete(data);
+            }
         } else {
-            return await this.baseRepository().delete(data);
+            return null;
         }
     }
 
