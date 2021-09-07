@@ -33,7 +33,7 @@ export abstract class BaseRepository<T> implements IbaseRepository {
     }
 
     get(id: number): Promise<T | any> {
-        return this.baseRepository().findByIds([id]);
+        return this.baseRepository().findOne({where: {id: id}});
     }
 
 
@@ -60,7 +60,7 @@ export abstract class BaseRepository<T> implements IbaseRepository {
             } else {
                 return await this.baseRepository().delete(data);
             }
-        } else {
+        }else{
             return null;
         }
     }

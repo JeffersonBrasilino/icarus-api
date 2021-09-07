@@ -16,7 +16,7 @@ const mockRepo = {
         if (id == 3) {
             return ['hue'];
         } else {
-            return [];
+            return null;
         }
     },
     save: (dados, id) => {
@@ -37,7 +37,7 @@ beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
         imports: [<%= classify(name) %>Module],
     })
-        //.overrideProvider('IUsersRepository') para mockar os repositorios usar isso, eis o ex.
+        //.overrideProvider('IUsersRepository') //para mockar os repositorios usar isso, eis o ex.
         //.useValue(mockRepo)
         .compile();
 
@@ -57,7 +57,7 @@ beforeAll(async () => {
 
 });
 
-describe('LIST users (e2e)', () => {
+describe('LIST /<%= route %> (e2e)', () => {
     it(`quando acessar a LISTAGEM, listar e retornar 200`, () => {
         return request(app.getHttpServer())
             .get('/<%= route %>')
@@ -99,7 +99,7 @@ describe('GET users (e2e)', () => {
     });
 });
 
-describe('SAVE users(e2e)', () => {
+describe('SAVE /<%= route %> (e2e)', () => {
     it('quando tentar salvar os dados com dados enviados, retorna 201', () => {
         return request(app.getHttpServer())
             .post('/<%= route %>')
@@ -121,7 +121,7 @@ describe('SAVE users(e2e)', () => {
     })
 });
 
-describe('UPDATE users(e2e)', () => {
+describe('UPDATE /<%= route %> (e2e)', () => {
     it('quando tentar atualizar os dados com dados enviados, retorna 200', () => {
         return request(app.getHttpServer())
             .put('/<%= route %>/3')
@@ -151,7 +151,7 @@ describe('UPDATE users(e2e)', () => {
     })
 });
 
-describe('DELETE users(e2e)', () => {
+describe('DELETE /<%= route %> (e2e)', () => {
     it('quando tentar deletar com ID, retorna 200', () => {
         return request(app.getHttpServer())
             .delete('/<%= route %>/3')

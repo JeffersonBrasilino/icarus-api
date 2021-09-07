@@ -4,7 +4,6 @@ export abstract class BaseService {
 
     async list(page: number, filter?: object) {
         try {
-            console.log('base service list')
             const res = await this._baseRepo.list(page, filter);
             if (res.rows?.length > 0)
                 return {status: 'OK', data: res};
@@ -17,10 +16,9 @@ export abstract class BaseService {
 
     async get(id: number) {
         try {
-            console.log('base service get')
             const res = await this._baseRepo.get(id);
-            if (res.length > 0)
-                return {status: 'OK', data: res[0]};
+            if (res)
+                return {status: 'OK', data: res};
             else
                 return {status: 'NOT_FOUND', data: []}
         } catch (e) {
@@ -30,7 +28,6 @@ export abstract class BaseService {
 
     async save(dados: any, id?: number) {
         try {
-            console.log('base service save')
             const res = await this._baseRepo.save(dados, id);
             if (res.id)
                 return {status: id ? 'OK' : 'CREATED', data: {id: res.id}};
@@ -44,7 +41,6 @@ export abstract class BaseService {
 
     async delete(id: number) {
         try {
-            console.log('base service delete')
             const res = await this._baseRepo.delete(id);
             if (res.affected > 0)
                 return {status: 'OK', data: []};
