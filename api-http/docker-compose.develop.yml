@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  api-icarus-dev:
+    container_name: api-icarus-dev
+    extends:
+      file: docker-compose.yml
+      service: api-icarus
+    volumes:
+      - ./app:/app
+    entrypoint: ./start-develop.sh
+    depends_on:
+      - icarus-database
+    networks:
+      - icarus-database
+
+  icarus-database:
+    container_name: icarus-database
+    image: postgres
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "15432:5432"
+    networks:
+      - icarus-database
+
+networks:
+  icarus-database:
+    driver: bridge
+
+

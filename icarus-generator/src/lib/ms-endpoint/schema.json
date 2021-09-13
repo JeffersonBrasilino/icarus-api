@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsicarusMicroservice",
+  "title": "opcoes gerador microservice-endpoint icarus",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "nome_tabela",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "qual o nome do endpoint?(nada de espacos, nome separados por -)"
+    },
+    "path": {
+      "type": "string",
+      "description": "path",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "qual o caminho do endpoint?(caso não passe nada, será criado na raiz 'application')"
+    }
+  },
+  "required": ["name"]
+}

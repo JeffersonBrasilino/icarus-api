@@ -1,0 +1,36 @@
+import {Ctx, MessagePattern, NatsContext, Payload, Transport} from "@nestjs/microservices";
+import {<%= classify(name) %>Service} from "../service/<%= dasherize(name) %>.service";
+import {Save<%= classify(name) %>Dto} from "@applications/<%= route %>/dto/save-<%= dasherize(name) %>.dto";
+import {BaseController} from "@core/base-application/base.controller";
+import {Controller} from "@nestjs/common";
+
+@Controller()
+export class <%= classify(name) %>Controller extends BaseController {
+    private static BASE_PATTERN: string = '<%= route %>';
+
+    constructor(private _service: <%= classify(name) %>Service) {
+        super(_service);
+    }
+
+    @MessagePattern(`LIST:${<%= classify(name) %>Controller.BASE_PATTERN}`)
+    async lista(@Payload() data: any, @Ctx() c:NatsContext): Promise<any> {
+        const a = await super.list(data);
+        return a;
+    }
+
+    @MessagePattern(`GET:${<%= classify(name) %>Controller.BASE_PATTERN}`)
+    async get(@Payload() data: any): Promise<any> {
+        return await super.get(data);
+    }
+
+    @MessagePattern(`SAVE:${<%= classify(name) %>Controller.BASE_PATTERN}`)
+    async save(@Payload('data') data: Save<%= classify(name) %>Dto, @Payload('id') id?: number | string) {
+        return await super.save(data, id);
+    }
+
+    @MessagePattern(`DELETE:${<%= classify(name) %>Controller.BASE_PATTERN}`)
+    async delete(@Payload('id') id: number | string) {
+        return await super.delete(id);
+    }
+
+}
