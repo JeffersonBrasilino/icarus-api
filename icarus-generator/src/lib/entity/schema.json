@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "SchematicsLenusEntity",
-  "title": "opcoes gerador entitade lenus",
+  "$id": "SchematicsicarusEntity",
+  "title": "opcoes gerador entitade icarus",
   "type": "object",
   "properties": {
     "name": {

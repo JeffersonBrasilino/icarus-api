@@ -3,13 +3,18 @@
   "schematics": {
     "entity": {
       "factory": "./lib/entity/entity.factory#main",
-      "description": "Criar entidades de banco de dados no lenus.",
+      "description": "Criar entidades de banco de dados no icarus.",
       "schema": "./lib/entity/schema.json"
     },
     "endpoint": {
       "factory": "./lib/endpoint/ep.factory#main",
-      "description": "Criar endpoints no lenus.",
+      "description": "Criar endpoints no icarus.",
       "schema": "./lib/endpoint/schema.json"
+    },
+    "ms-endpoint": {
+      "factory": "./lib/ms-endpoint/ms-endpoint.factory#main",
+      "description": "Criar microservice-endpoint no icarus.",
+      "schema": "./lib/ms-endpoint/schema.json"
     }
   }
 }
