@@ -2,4 +2,6 @@ import {IbaseRepository} from "@infrastructure/database/contracts/repository/iba
 
 export interface IApplicationsRepository extends IbaseRepository {
     getApplicationByPublicAndPrivateToken(applicationId: string, applicationToken: string);
+
+    checkPermissionRouteByApplicationId(applicationId: string|number, route:string);
 }

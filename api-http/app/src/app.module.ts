@@ -6,6 +6,9 @@ import {TypeormConnection} from "@infrastructure/database/typeorm/connection/typ
 import {OpenRoutesStrategy} from "@infrastructure/http/guards/open-routes/authentication/open-routes.strategy";
 import {AuthRoutesStrategy} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.strategy";
 import {ApplicationsModule} from "@applications/applications.module";
+import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
+import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
+import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/authorization/authorization.guard";
 
 @Module({
     imports: [
@@ -21,7 +24,19 @@ import {ApplicationsModule} from "@applications/applications.module";
     providers: [
         AppService,
         OpenRoutesStrategy,
-        AuthRoutesStrategy
+        AuthRoutesStrategy,
+        {
+            provide: 'APP_GUARD',
+            useClass: OpenRoutesGuard
+        },
+        {
+            provide: 'APP_GUARD',
+            useClass: AuthRoutesGuard
+        },
+        {
+            provide: 'APP_GUARD',
+            useClass: AuthorizationGuard
+        }
     ],
 })
 export class AppModule{

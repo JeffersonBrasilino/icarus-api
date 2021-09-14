@@ -27,5 +27,5 @@ export class ApplicationsEntity extends BaseEntity {
     thirdPartyApplication!: string
 
     @OneToMany(() => ApiRoutesApplicationsEntity, ara => ara.application)
-    apiRoutes!: ApiRoutesApplicationsEntity[]
+    apiRoutesApplications!: ApiRoutesApplicationsEntity[]
 }

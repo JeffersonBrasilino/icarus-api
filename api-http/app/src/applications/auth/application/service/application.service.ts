@@ -26,4 +26,9 @@ export class ApplicationService {
         }
     }
 
+    async checkPermissionRouteAplication(applicationId: string | number, route: string) {
+        const permissionsApplication = await this.repo.checkPermissionRouteByApplicationId(applicationId, route);
+        return !!(permissionsApplication[0]?.apiRoutesApplications);
+    }
+
 }
