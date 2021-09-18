@@ -1,4 +1,4 @@
-import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
+import { Module} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {TypeOrmModule} from "@nestjs/typeorm";
@@ -9,6 +9,8 @@ import {ApplicationsModule} from "@applications/applications.module";
 import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
 import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
 import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/authorization/authorization.guard";
+import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
+import {NatsResponseExceptionInterceptor} from "@infrastructure/http/interceptors/nats-response-exception.interceptor";
 
 @Module({
     imports: [
@@ -26,17 +28,21 @@ import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/author
         OpenRoutesStrategy,
         AuthRoutesStrategy,
         {
-            provide: 'APP_GUARD',
+            provide: APP_GUARD,
             useClass: OpenRoutesGuard
         },
         {
-            provide: 'APP_GUARD',
+            provide: APP_GUARD,
             useClass: AuthRoutesGuard
         },
         {
-            provide: 'APP_GUARD',
+            provide: APP_GUARD,
             useClass: AuthorizationGuard
-        }
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: NatsResponseExceptionInterceptor,
+        },
     ],
 })
 export class AppModule{

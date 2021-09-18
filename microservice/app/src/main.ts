@@ -1,7 +1,7 @@
 import {NestFactory} from "@nestjs/core";
 import {MicroserviceOptions, Transport} from "@nestjs/microservices";
 import {AppModule} from "./app.module";
-import {ValidationPipe} from "@nestjs/common";
+import {ValidationPipe,Logger} from "@nestjs/common";
 import {ReceiveMessageExternalDeserializer} from "@infrastructure/nats/deserializers/receive-message-external.deserialize";
 import {SendMessageExternalSerialize} from "@infrastructure/nats/serializers/send-message-external.serialize";
 import {NatsCustomClient} from "@infrastructure/nats/client/nats-custom.client";
@@ -9,12 +9,17 @@ import {NatsCustomClient} from "@infrastructure/nats/client/nats-custom.client";
 bootstrap();
 
 async function bootstrap() {
+
+    if(!process.env.APP_NATS_SERVER_HOST){
+        throw new Error('APP_NATS_SERVER_HOST variavel no .env não foi definido');
+    }
+
     const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
         //@ts-ignore
         transport: Transport.NATS,
         options: {
-            queue: 'companies_queue',
-            servers: ['nats://icarus-nats'],
+            queue: process.env.APP_NATS_SERVER_QUEUE ?? undefined,
+            servers: [`nats://${process.env.APP_NATS_SERVER_HOST}`],
             deserializer: new ReceiveMessageExternalDeserializer(),
             serializer: new SendMessageExternalSerialize()
         },
@@ -25,4 +30,6 @@ async function bootstrap() {
     /*VALIDACOES DO PAYLOAD*/
     app.useGlobalPipes(new ValidationPipe());
     await app.listen();
+
+    new Logger().verbose(`${process.env.COMPOSE_PROJECT_NAME} iniciado.`)
 }

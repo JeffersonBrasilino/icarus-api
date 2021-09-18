@@ -9,27 +9,15 @@ import JwtSettings from "@infrastructure/http/settings/jwt.settings";
 export class RequestContext {
 
     public static setRequestContext(name: string, value: any) {
-        const namespace = getNamespace('icarus.dbnamespace') || createNamespace('icarus.dbnamespace');
+        const namespace = getNamespace('lenus.dbnamespace') || createNamespace('lenus.dbnamespace');
 
         namespace.run(() => {
             namespace.set(name, value);
         });
     }
 
-    public static currentRequestContext() {
-        let namespace = getNamespace('icarus.dbnamespace');
-        return namespace.get('curreq');
-    }
-
-    public static getUserDataByRequestToken(): any {
-        let request = RequestContext.currentRequestContext();
-        const {headers} = request;
-        if (headers?.authorization) {
-            const token = (headers.authorization.replace(/[Bb]earer/, '')).trim();
-            return (new JwtService(JwtSettings)).decode(token);
-        } else {
-            //TODO: implementar para rotas abertas(se bem que não precisa...)
-            return {origin: 'huehuebrbr'};
-        }
+    public static currentRequestContext(nameSpace: string) {
+        let namespace = getNamespace('lenus.dbnamespace');
+        return namespace.get(nameSpace);
     }
 }

@@ -15,7 +15,6 @@ export abstract class BaseController {
     }
 
     async post(saveDto: object, res) {
-        console.log('base post');
         const result = await this._baseService.save(saveDto);
         res.status(HttpStatus[result.status]).json(result);
     }

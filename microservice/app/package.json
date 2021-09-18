@@ -1,5 +1,5 @@
 {
-  "name": "icarus-microservice",
+  "name": "mudar o name no package.json",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -25,10 +25,12 @@
     "migration:revert": "npx typeorm -c ${APP_DB_CONNECTION_NAME:-default} migration:revert",
     "save-routes-db": "SAVE_ROUTES=true npm run start",
     "generate:entity": "nest g -c @icarus/generator entity",
-    "generate:endpoint": "nest g -c @icarus/generator endpoint",
-    "test:module": "npx jest src/applications/$npm_config_module"
+    "generate:endpoint": "nest g -c @icarus/generator ms-endpoint",
+    "test:module": "npx jest src/applications/$npm_config_module",
+    "generate:doc": "npx @compodoc/compodoc -p tsconfig.doc.json"
   },
   "dependencies": {
+    "@icarus/generator": "file:icarus-generator-2.4.0.tgz",
     "@nestjs/common": "^8.0.1",
     "@nestjs/core": "^8.0.1",
     "@nestjs/cqrs": "^8.0.0",
@@ -60,6 +62,7 @@
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.14",
     "@nestjs/cli": "^8.0.2",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.2",

@@ -86,6 +86,7 @@ export class SaveRoutesDatabase {
                     if (rtc.deletedAt) {
                         console.log('restaura rota >> ', rtc.route);
                         await this._repo.restoreDeleted(rtc.id);
+                        await this._repo.save({id:rtc.id, status:'1'});
                         //await this._rotasApiAcoesRepo.delete({apiRotasId: rtc.id});
                     }
 

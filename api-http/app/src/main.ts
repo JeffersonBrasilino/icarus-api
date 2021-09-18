@@ -5,6 +5,9 @@ import {NestExpressApplication} from "@nestjs/platform-express";
 import {ValidationPipe} from "@nestjs/common";
 import {SwaggerGenerateDocumentation} from "@infrastructure/http/api-docs/swagger-generate.documentation";
 import {RequestContextMiddleware} from "@infrastructure/http/middlewares/request-context.middleware";
+import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
+import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
+import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/authorization/authorization.guard";
 import {SaveRoutesDatabase} from "@infrastructure/http/core/save-routes-database";
 
 bootstrap();
@@ -16,9 +19,18 @@ async function bootstrap() {
 
     app.use(helmet());
 
+    /*CORS*/
+    app.enableCors({
+        origin: [
+            /^(.*)/,
+        ],
+        methods: 'GET,PUT,POST,DELETE,OPTIONS',
+        allowedHeaders:
+            'Origin,X-Requested-With,Content-Type,Accept,Authorization,authorization,X-Forwarded-for,app-authorization',
+    })
+
     /*VALIDACOES DO BODY*/
     app.useGlobalPipes(new ValidationPipe());
-
 
     //registra logs(somente producao)
     app.use(RequestContextMiddleware);

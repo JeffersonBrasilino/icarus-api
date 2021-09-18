@@ -8,12 +8,12 @@ import {UserController} from "@applications/auth/user/controller/user.controller
 import {UserService} from "@applications/auth/user/service/user.service";
 
 @Module({
-    imports:[
+    imports: [
         PassportModule,
         JwtModule.register(JwtSettings)
     ],
     controllers: [UserController],
-    providers: [UserService,UserRepositoryProvider, UsersGroupsPermissionsRepositoryProvider, SendEmailProvider],
+    providers: [UserService, UserRepositoryProvider, UsersGroupsPermissionsRepositoryProvider, SendEmailProvider],
     exports: [UserService]
 })
 export class UserModule {

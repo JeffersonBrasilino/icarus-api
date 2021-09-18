@@ -11,7 +11,7 @@ services:
     depends_on:
       - icarus-database
     networks:
-      - icarus-database
+      - services
 
   icarus-database:
     container_name: icarus-database
@@ -22,10 +22,20 @@ services:
     ports:
       - "15432:5432"
     networks:
-      - icarus-database
+      - services
+
+  nats:
+    container_name: icarus-nats-dev
+    extends:
+      file: docker-compose.yml
+      service: nats
+    networks:
+      services:
+        aliases:
+          - '${API_NATS_SERVER_HOST}'
 
 networks:
-  icarus-database:
+  services:
     driver: bridge
 
 

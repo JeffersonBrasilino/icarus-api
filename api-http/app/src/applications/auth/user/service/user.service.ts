@@ -36,15 +36,9 @@ export class UserService {
         }
     }
 
-    async getPermissionRouteByUser(userId) {
-        const permissionsDb = await this.ugp.checkPermissionRouteByUser(userId);
-        return permissionsDb.map((permission) => {
-            return {
-                action: permission.action,
-                application: permission.apiRouteApplication?.application?.publicKey,
-                route: permission.apiRouteApplication?.apiRoute?.route
-            }
-        });
+    async getPermissionRouteByUser(userId, route, method) {
+        const permissions = await this.ugp.checkPermissionRouteByUser(userId, route, method);
+        return permissions.length > 0;
     }
 
     async sendVerificationCodetoEmailUser(username: string) {
@@ -63,9 +57,9 @@ export class UserService {
 
                     //envia email
                     const opt: SendEmailOptions = {
-                        from: '',
+                        from: 'jefferson.wendhel@gmail.com',
                         to: email,
-                        subject: 'Código de verificação - recuperar senha',
+                        subject: 'Código de verificação - recuperar senha MedClub',
                         html: `código de verificação: <b>${verificationCode}</b>`,
                     };
                     const sendEmailStatus = await this.email.sendEmail(opt);
@@ -75,7 +69,7 @@ export class UserService {
                     } else {
                         return {status: 'FAILED_DEPENDENCY', data: 'erro ao enviar email.'}
                     }
-                }else{
+                } else {
                     return {status: 'UNPROCESSABLE_ENTITY', data: 'email inválido.'}
                 }
             } else {

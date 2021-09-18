@@ -1,8 +1,8 @@
 
 import {Module} from "@nestjs/common";
-import {CompaniesModule} from "@applications/companies/companies.module";
+import {LogsModule} from "@applications/logs/logs.module";
 const MODULES = [
-    CompaniesModule
+    LogsModule
 ];
 
 @Module({

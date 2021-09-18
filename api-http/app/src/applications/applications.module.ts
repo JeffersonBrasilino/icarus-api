@@ -1,10 +1,12 @@
 import {AuthModule} from "@applications/auth/auth.module";
 import {Module} from "@nestjs/common";
-import {AdministrationModule} from "@applications/administration/administration.module";
+import {PersonsModule} from "@applications/persons/persons.module";
+import {LogsModule} from "@applications/logs/logs.module";
 
 const MODULES = [
     AuthModule,
-    AdministrationModule
+    PersonsModule,
+    LogsModule
 ];
 
 @Module({

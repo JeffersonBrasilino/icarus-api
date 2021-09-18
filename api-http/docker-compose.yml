@@ -9,3 +9,11 @@ services:
     env_file:
       - .env
 
+  nats:
+    image: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
+    env_file:
+      - .env

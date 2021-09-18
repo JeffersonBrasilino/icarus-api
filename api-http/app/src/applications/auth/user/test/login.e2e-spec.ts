@@ -53,7 +53,7 @@ beforeAll(async () => {
 )
 ;
 
-describe('auth (e2e)', () => {
+describe('/auth/login (e2e)', () => {
 
     it(`quando user e senha for CORRETOS retorna o token`, () => {
         return request(app.getHttpServer())

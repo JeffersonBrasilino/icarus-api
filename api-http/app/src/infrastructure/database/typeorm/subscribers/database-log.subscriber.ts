@@ -29,13 +29,13 @@ export class DatabaseLogSubscriber implements EntitySubscriberInterface {
     private static registerLog(table: string, oldData: string) {
         try {
             if (process.env?.APP_PROD === 'PRODUCTION') {
-                const userData = RequestContext.getUserDataByRequestToken();
+               /* const userData = RequestContext.getUserDataByRequestToken();
                 const data = {
                     table: table,
                     userId: userData.userId,
                     data: oldData
                 }
-                getRepository(LogDatabaseEntity).save(data);
+                getRepository(LogDatabaseEntity).save(data);*/
             }
         } catch (e) {
             throw Error('problema ao registrar o log de alteração da tabela.');

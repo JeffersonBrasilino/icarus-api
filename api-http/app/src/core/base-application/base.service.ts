@@ -34,7 +34,6 @@ export abstract class BaseService {
             else
                 return {status: 'NOT_FOUND', data: 'registro não encontrado.'}
         } catch (e) {
-            console.log(e);
             return {status: 'INTERNAL_SERVER_ERROR', data: 'houve um problema, tente novamente mais tarde.'}
         }
     }
@@ -42,7 +41,7 @@ export abstract class BaseService {
     async delete(id: number) {
         try {
             const res = await this._baseRepo.delete(id);
-            if (res.affected > 0)
+            if (res?.affected > 0)
                 return {status: 'OK', data: []};
             else
                 return {status: 'NOT_FOUND', data: []}

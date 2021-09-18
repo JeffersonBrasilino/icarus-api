@@ -1,5 +1,4 @@
 import {Deserializer, WritePacket} from '@nestjs/microservices';
-import {MessageContext} from "@infrastructure/nats/context/message-context";
 
 /*
 * classe deserializadora de respostas do NATS
@@ -10,11 +9,7 @@ import {MessageContext} from "@infrastructure/nats/context/message-context";
 export class ReceiveMessageExternalDeserializer implements Deserializer {
     deserialize(value: any): WritePacket {
         if (value.toString()) {
-            const valueJson = JSON.parse(value.toString());
-            if (valueJson.reqdata) {
-                MessageContext.setContext( 'reqdata', valueJson.reqdata);
-            }
-            return valueJson;
+            return JSON.parse(value.toString());
         } else {
             return {
                 err: {status: 'SERVICE_UNAVAILABLE', data: 'erro ao se comunicar com o servico.'}
