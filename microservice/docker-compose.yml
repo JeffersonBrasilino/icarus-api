@@ -4,8 +4,6 @@ services:
     container_name: icarus-microservice
     image: node:14.17-alpine
     build: .
-    ports:
-      - "${API_PORT}:${API_PORT}"
     env_file:
       - .env
 
