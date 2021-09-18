@@ -1,14 +1,18 @@
 version: "3.9"
 services:
-  api-icarus-node-prod:
-    container_name: api-icarus-node-prod
+  icarus-service-prod:
+    container_name: icarus-service-prod
     extends:
       file: docker-compose.yml
-      service: api-icarus-node
-    restart: always
+      service: microservice
+    volumes:
+      - ./app:/app
     entrypoint: ./start-prod.sh
-    environment:
-      APP_PROD: 'PRODUCTION'
-      APP_DB_NAME: 'production'
     env_file:
-       - .env
+      - .env
+    networks:
+      - icarus_services
+
+networks:
+  icarus_services:
+    external: true

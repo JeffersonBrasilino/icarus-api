@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  icarus-companies-service:
-    container_name: icarus-companies-service
+  microservice:
+    container_name: icarus-microservice
     image: node:14.17-alpine
     build: .
     ports:

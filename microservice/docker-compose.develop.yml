@@ -1,18 +1,18 @@
 version: "3.9"
 services:
   icarus-service-dev:
-    container_name: icarus-companies-service-dev
+    container_name: icarus-service-dev
     extends:
       file: docker-compose.yml
-      service: icarus-companies-service
+      service: microservice
     volumes:
       - ./app:/app
     entrypoint: ./start-develop.sh
     env_file:
       - .env
     networks:
-      - icarus-api_services
+      - icarus_services
 
 networks:
-  icarus-api_services:
+  icarus_services:
     external: true
