@@ -5,6 +5,8 @@ npm install
 
 #npm run migration:run
 
-#npm run save-routes-db
+#npm run generate:doc
+
+#npx @compodoc/compodoc
 
 npm run start:dev

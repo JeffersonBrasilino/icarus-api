@@ -3,9 +3,8 @@ import {
     EventSubscriber, getRepository,
     UpdateEvent
 } from "typeorm";
-
-import {LogDatabaseEntity} from "@infrastructure/database/typeorm/entities/log-database/log-database.entity";
 import {RequestContext} from "@infrastructure/http/core/request-context";
+import {LogDatabaseEntity} from "@infrastructure/database/typeorm/entities/log-database/log-database.entity";
 
 @EventSubscriber()
 export class DatabaseLogSubscriber implements EntitySubscriberInterface {
@@ -29,13 +28,13 @@ export class DatabaseLogSubscriber implements EntitySubscriberInterface {
     private static registerLog(table: string, oldData: string) {
         try {
             if (process.env?.APP_PROD === 'PRODUCTION') {
-               /* const userData = RequestContext.getUserDataByRequestToken();
+                const userData = RequestContext.getUserDataByRequestToken();
                 const data = {
                     table: table,
                     userId: userData.userId,
                     data: oldData
                 }
-                getRepository(LogDatabaseEntity).save(data);*/
+                getRepository(LogDatabaseEntity).save(data);
             }
         } catch (e) {
             throw Error('problema ao registrar o log de alteração da tabela.');

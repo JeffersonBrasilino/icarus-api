@@ -1,16 +1,36 @@
 import {NestExpressApplication} from "@nestjs/platform-express";
 import {ApiRoutesRepository} from "@infrastructure/database/typeorm/entities/api-routes/api-routes.repository";
 import {IApiRoutesRepository} from "@infrastructure/database/contracts/repository/Iapi-routes.repository";
+import {Client, ClientProxy, ClientsModule, Transport} from "@nestjs/microservices";
+import {SendMessageExternalSerialize} from "@infrastructure/nats/serializers/send-message-external.serialize";
+import {ReceiveMessageExternalDeserializer} from "@infrastructure/nats/deserializers/receive-message-external.deserialize";
+import {NatsCustomClient} from "@infrastructure/nats/client/nats-custom.client";
+import {ClientProxyFactory} from '@nestjs/microservices';
 
 export class SaveRoutesDatabase {
     private _repo: IApiRoutesRepository;
+    private natsClient: ClientProxy;
 
     constructor(private _app: NestExpressApplication) {
         this._repo = new ApiRoutesRepository();
+
+        this.natsClient = ClientProxyFactory.create({
+
+            //@ts-ignore
+            transport: Transport.NATS,
+            options: {
+                servers: ['nats://' + process.env.API_NATS_SERVER_HOST],
+                serializer: new SendMessageExternalSerialize(),
+                deserializer: new ReceiveMessageExternalDeserializer(),
+                maxReconnectAttempts: -1 //max de tentativas de reconexao -1 = sem limite
+            },
+            //@ts-ignore
+            customClass: NatsCustomClient
+        })
     }
 
     async save() {
-        console.log('salva rotas no banco...');
+        console.log('salvando novas rotas, AGUARDE...');
         //rotas que não serão analisadas para serem salvas
         const excludedRoutes = ['/', '/docs', '/docs-json'];
         //busca todas as rotas cadastradas no banco
@@ -30,92 +50,58 @@ export class SaveRoutesDatabase {
                     //verifica se a rota ja foi adicionada(pois quando a mesma rota tem mais de uma acao, ela vem repetida)
 
                     let keyRota = rotasSalvar.findIndex(rt => rt.route === res.route.path);
-                    if (keyRota === -1) {
-                        rotasSalvar.push({id: null, route: res.route.path, requireAuth: 1/*, apiRotasAcoes: []*/});
-                    }
-                    keyRota = rotasSalvar.findIndex(rt => rt.route === res.route.path);
-                    if (rotaCadastradaKey !== -1) {
-                        console.log('rota existente >> ', res.route.path);
-                        //adiciona o id da rota cadastrada
-                        rotasSalvar[keyRota].id = rotasCadastradas[rotaCadastradaKey].id;
-
-                        /*
-                        //busca todas as acoes cadastradas na rota
-                        let acaoCadastrada = await this._rotasApiAcoesRepo.getActionByRotaIdAndAcao(rotasCadastradas[rotaCadastradaKey].id);
-
-
-                        //caso cadastrada, verifica se houve alguma alteracao de subrotas
-                        const acaoCadastradaKey = acaoCadastrada.findIndex(ac => ac.acao === acaoCadastrar);
-                        if (acaoCadastradaKey === -1) {//caso for uma nova acao, adiciona no array da rota para cadatrar.
-                            console.log('adicona nova acao>> ', acaoCadastrar);
-                            rotasSalvar[keyRota].apiRotasAcoes.push({acao: acaoCadastrar});
-                        } else {
-                            const acaoId = acaoCadastrada[acaoCadastradaKey].id;
-                            rotasSalvar[keyRota].apiRotasAcoes.push({
-                                id: acaoId,
-                                acao: acaoCadastrar
-                            });
-                            console.log('acao ja cadastrada >> ', acaoCadastrar+' id: '+ acaoId);
+                    if (keyRota === -1 && rotaCadastradaKey == -1) {
+                        const rgx = new RegExp(/^.*(\/:id)$/);
+                        const isIdParam = res.route.path.match(rgx);
+                        let permissions = [
+                            {
+                                usersGroups: {id: "1"},
+                                action: "POST"
+                            },
+                            {
+                                usersGroups: {id: "1"},
+                                action: "GET"
+                            }
+                        ];
+                        if (isIdParam) {
+                            permissions = [
+                                {
+                                    usersGroups: {id: "1"},
+                                    action: "GET"
+                                },
+                                {
+                                    usersGroups: {id: "1"},
+                                    action: "PUT"
+                                },
+                                {
+                                    usersGroups: {id: "1"},
+                                    action: "DELETE"
+                                }
+                            ]
                         }
-                        */
 
-                    } else {
-                        console.log('nova rota >> ', res.route.path);
-                        //caso nao seja cadastrada, adicona no array de rotas a ser salva
-                        //rotasSalvar[keyRota].apiRotasAcoes.push({acao: acaoCadastrar})
+                        rotasSalvar.push({
+                            route: res.route.path, applications: [
+                                {
+                                    application: {
+                                        id: "1"
+                                    },
+                                    userGroupsPermissions: permissions
+                                }
+                            ]
+                        });
                     }
                 }
             }
         })
 
-        //verifica se houve alguma EXCLUSAO de rotas na aplicacao(conforme o banco)
-        /*
-        *ha um problema com o softDelete quando se usa relacoes
-        * para adicionar, funciona perfeitamente, mas quando se trata de exclusaõ com SOFT DELETE o mesmo não exclui
-        * (preencher o deleted_at dos filhos quando se chama a função de deletar via pai.
-        * por conta disso, a delecao do filho foi feita de forma "manual".
-        * para HARD DELETE funciona lindamente, basta adicionar a flag orphanedRowAction: 'delete'
-        * */
-        await Promise.all(
-            rotasCadastradas.map(async rtc => {
-                const rotaCadastradaKey = rotasSalvar.findIndex(rs => rs.route === rtc.route);
-                if (rotaCadastradaKey === -1) {
-                    console.log('deleta rota TOTAL>> ', rtc.route);
-                    await this._repo.delete(rtc.id);
-                } else {
-                    if (rtc.deletedAt) {
-                        console.log('restaura rota >> ', rtc.route);
-                        await this._repo.restoreDeleted(rtc.id);
-                        await this._repo.save({id:rtc.id, status:'1'});
-                        //await this._rotasApiAcoesRepo.delete({apiRotasId: rtc.id});
-                    }
-
-                    /* const acaoCadastrada = await this._rotasApiAcoesRepo.getActionByRotaIdAndAcao(rtc.id);
-
-                     acaoCadastrada.map(apiRotaAcao => {
-                         //busca a acao cadastrada no array de acoes do controller
-                         const acaoCadastradaId = rotasSalvar[rotaCadastradaKey].apiRotasAcoes.findIndex(rsa => rsa.acao === apiRotaAcao.acao);
-
-                         if (acaoCadastradaId !== -1 && apiRotaAcao.deletedAt) {//se existir a acao a mesma estiver deletada, restaura
-                             this._rotasApiAcoesRepo.restoreDeleted(apiRotaAcao.id);
-                             console.log('restauara acao >> ',`${apiRotaAcao.acao} id: ${apiRotaAcao.id}`);
-
-                         } else if (acaoCadastradaId === -1) {//caso a acao nao exista mais nos controllers, deleta do banco
-                             this._rotasApiAcoesRepo.delete(apiRotaAcao.id);
-                             console.log('deleta acao >> ',`${apiRotaAcao.acao} id: ${apiRotaAcao.id}`);
-                         }
-
-                         //adiciona o id da acao no array de salvar, para o orm não tentar "excluir" o registro existente.
-                         rotasSalvar[rotaCadastradaKey].apiRotasAcoes.push({id: apiRotaAcao.id});
-                     });*/
-                }
-            })
-        );
-
-        //salva todas as rotas NOVAS ou acoes NOVAS
         if (rotasSalvar.length !== 0) {
-            await this._repo.save(rotasSalvar);
+            rotasSalvar.map(rs => {
+                this.natsClient.send('SAVE:administration/api-routes', {data: rs}).subscribe(res => console.log(res))
+            })
+            //await this._repo.save(rotasSalvar);
         }
+        //salva todas as rotas NOVAS ou acoes NOVAS
 
 
         setTimeout(async () => {

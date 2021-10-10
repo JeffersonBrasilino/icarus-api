@@ -1,0 +1,12 @@
+import {Module} from "@nestjs/common";
+import {<%= classify(name) %>Controller} from "./controller/<%= dasherize(name) %>.controller";
+import {NatsClientModule} from "@infrastructure/nats/client/nats-client.module";
+//inportar o(s) provider(s) do(s) repositorio(s) aqui ex: UserRepositoryProvider
+@Module({
+    imports:[NatsClientModule],
+    controllers: [<%= classify(name) %>Controller],
+    providers: [],
+    exports: []
+})
+export class <%= classify(name) %>Module {
+}

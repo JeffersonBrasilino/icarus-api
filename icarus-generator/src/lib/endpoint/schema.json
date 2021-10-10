@@ -4,6 +4,24 @@
   "title": "opcoes gerador endpoint icarus",
   "type": "object",
   "properties": {
+    "typeController": {
+      "description": "O controller vai se comunicar via",
+      "default": "nats",
+      "x-prompt": {
+        "message": "O controller vai se comunicar via",
+        "type": "list",
+        "items": [
+          {
+            "value": "nats",
+            "label": "nats"
+          },
+          {
+            "value": "http",
+            "label": "http"
+          }
+        ]
+      }
+    },
     "name": {
       "type": "string",
       "description": "nome_tabela",
@@ -23,5 +41,5 @@
       "x-prompt": "qual o caminho do endpoint?(caso não passe nada, será criado na raiz 'application')"
     }
   },
-  "required": ["name"]
+  "required": ["typeController","name"]
 }

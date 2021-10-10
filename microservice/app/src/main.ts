@@ -11,7 +11,11 @@ bootstrap();
 async function bootstrap() {
 
     if(!process.env.APP_NATS_SERVER_HOST){
-        throw new Error('APP_NATS_SERVER_HOST variavel no .env não foi definido');
+        throw new Logger().error('APP_NATS_SERVER_HOST variavel no .env não foi definido');
+    }
+
+    if(!process.env.APP_BASE_PATTERN_MESSAGE){
+        throw new Logger().error('APP_BASE_PATTERN_MESSAGE variavel no .env não foi definido')
     }
 
     const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {

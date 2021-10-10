@@ -1,0 +1,138 @@
+import {Body, Controller, Delete, Get, HttpStatus, Param, Inject, Post, Put, Query, Res} from "@nestjs/common";
+import {Save<%= classify(name) %>Dto} from "@applications/<%= route %>/dto/save-<%= dasherize(name) %>.dto";
+import {NatsBaseController} from "@core/base-application/nats/nats-base.controller";
+import {
+    ApiBearerAuth,
+    ApiCreatedResponse,
+    ApiOkResponse,
+    ApiOperation,
+    ApiParam,
+    ApiQuery,
+    ApiResponse,
+    ApiTags
+} from "@nestjs/swagger";
+
+@ApiTags('<%= classify(name) %>')
+@Controller('<%= route %>')
+@ApiBearerAuth()
+export class <%= classify(name) %>Controller extends NatsBaseController {
+
+    constructor(@Inject('NATS_CLIENT') service) {
+           super(service, 'MESSAGE PATERN AQUI');
+       }
+
+       @ApiOperation({
+           summary: 'Listagem',
+           description: "Lista todos os registros com paginação, caso necesside de filtros, passar um objeto com campos da tabela e valor que irá filtrar."
+       })
+        @ApiOkResponse({
+               description: 'Quando a solicitação for bem sucedida.',
+               content: {
+                   json: {
+                       example: {
+                           status: 'OK',
+                           data: {
+                               rows: ['{...}'],
+                           },
+                           total: 10,
+                           perPage: 10,
+                       },
+                   },
+               },
+           })
+       @ApiQuery({name: 'page', description: 'numero da pagina(paginacao)', required: false})
+       @Get()
+       async list(@Query() query, @Res({passthrough: true}) res) {
+           const result = await super.baseList(query);
+           res.status(HttpStatus[result.status]).json(result);
+       }
+
+       @ApiOperation({
+           summary: 'retonar registro conforme ID',
+           description: "retorna o registro conforme o id"
+       })
+        @ApiOkResponse({
+                      description: 'Quando a solicitação for bem sucedida.',
+                      content: {
+                          json: {
+                              example: {
+                                  status: 'OK',
+                                  data: '{...}',
+                              },
+                          },
+                      },
+        })
+       @ApiParam({name: 'id', description: 'ID a ser consultado'})
+       @Get(':id')
+       async get(@Param('id',) id: number, @Res({passthrough: true}) res) {
+           const result = await super.baseGet(id);
+           res.status(HttpStatus[result.status]).json(result);
+       }
+
+       @ApiOperation({
+           summary: 'Salva o registro',
+           description: "salva o registro(cadastro) conforme a entidade e a entrada dos dados."
+       })
+       @ApiCreatedResponse({
+                      description: 'Quando a solicitação for bem sucedida.',
+                      content: {
+                          json: {
+                              example: {
+                                  status: 'CREATED',
+                                  data: {
+                                      id: '123456',
+                                  },
+                              },
+                          },
+                      },
+       })
+       @Post()
+       async post(@Body() saveDto: Save<%= classify(name) %>Dto, @Res({passthrough: true}) res) {
+           const result = await super.baseSave(saveDto);
+           res.status(HttpStatus[result.status]).json(result);
+       }
+
+       @ApiOperation({
+           summary: 'Atualiza o registro',
+           description: "Atualiza o registro(cadastro) conforme a entidade e a entrada dos dados.",
+       })
+        @ApiOkResponse({
+                      description: 'Quando a solicitação for bem sucedida.',
+                      content: {
+                          json: {
+                              example: {
+                                  status: 'OK',
+                                  data: {
+                                      id: '123456',
+                                  },
+                              },
+                          },
+                      },
+        })
+       @Put(':id')
+       async put(@Body() saveDto: Save<%= classify(name) %>Dto, @Param('id') id: number, @Res({passthrough: true}) res) {
+           const result = await super.baseUpdate(saveDto, id);
+           res.status(HttpStatus[result.status]).json(result);
+       }
+
+       @ApiOperation({
+           summary: 'Deleta o registro',
+           description: "DELETA o registro(soft-delete)"
+       })
+       @ApiOkResponse({
+                  description: 'Quando a solicitação for bem sucedida.',
+                  content: {
+                      json: {
+                          example: {
+                              status: 'OK',
+                              data: [],
+                          },
+                      },
+                  },
+              })
+       @Delete(':id')
+       async delete(@Param('id') id: number, @Res({passthrough: true}) res) {
+           const result = await super.baseDelete(id);
+           res.status(HttpStatus[result.status]).json(result);
+       }
+}

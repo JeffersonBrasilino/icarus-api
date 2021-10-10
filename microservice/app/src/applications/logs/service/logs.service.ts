@@ -6,7 +6,7 @@ import {ClientProxy} from "@nestjs/microservices";
 export class LogsService extends NatsBaseService {
     //injetar o(s) repositorio(s) ex: @Inject('IUsersRepository') private repo: IusersRepository
     constructor(
-        @Inject('LogsServiceNats') private broker: ClientProxy
+        @Inject('NATS_CLIENT') private broker: ClientProxy
     ) {
         super(broker, 'logs');
     }

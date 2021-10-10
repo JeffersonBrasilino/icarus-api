@@ -9,7 +9,7 @@ import JwtSettings from "@infrastructure/http/settings/jwt.settings";
 export class RequestContext {
 
     public static setRequestContext(name: string, value: any) {
-        const namespace = getNamespace('lenus.dbnamespace') || createNamespace('lenus.dbnamespace');
+        const namespace = getNamespace('icarus.dbnamespace') || createNamespace('icarus.dbnamespace');
 
         namespace.run(() => {
             namespace.set(name, value);
@@ -17,7 +17,8 @@ export class RequestContext {
     }
 
     public static currentRequestContext(nameSpace: string) {
-        let namespace = getNamespace('lenus.dbnamespace');
-        return namespace.get(nameSpace);
+        const namespace = getNamespace('icarus.dbnamespace');
+
+        return namespace ? namespace.get(nameSpace) : {};
     }
 }

@@ -13,7 +13,6 @@ export class BaseEntity {
     @UpdateDateColumn({name: 'updated_at', comment:'data de ALTERACAO do registro'})
     updatedAt!: Date;
 
-
     @DeleteDateColumn({name: 'deleted_at', comment:'data de EXCLUSAO do registro(soft-delete)'})
     deletedAt!: Date;
 }

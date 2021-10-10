@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/@compodoc/compodoc/src/config/schema.json",
+  "silent": false,
+  "serve": true,
+  "port": 5100,
+  "watch": false,
+  "theme": "original",
+  "disableSourceCode": true,
+  "disableLifeCycleHooks": true,
+  "disablePrivate": true,
+  "disableProtected": true,
+  "disableInternal": false,
+  "disableDomTree": true,
+  "disableTemplateTab": true,
+  "disableStyleTab": true,
+  "disableCoverage": true,
+  "hideGenerator": true,
+  "disableGraph": true,
+  "disableRoutesGraph": true,
+  "minimal": false
+}

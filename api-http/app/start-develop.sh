@@ -5,4 +5,6 @@ npm install
 
 npm run migration:run
 
+npm run save-routes-db
+
 npm run start:dev

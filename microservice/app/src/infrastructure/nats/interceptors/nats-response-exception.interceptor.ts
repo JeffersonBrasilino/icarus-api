@@ -14,11 +14,19 @@ export class NatsResponseExceptionInterceptor implements NestInterceptor {
             .handle()
             .pipe(
                 catchError(err => {
-                    const errorMessage = {
-                        status: HttpStatus[err.response?.statusCode] ?? 'INTERNAL_SERVER_ERROR',
+                    let errorMessage = {
+                        status: err?.status,
                         message: err.response?.message ?? 'erro desconhecido ao se comunicar com o NATS.'
                     }
+
+                    if ( typeof err?.status == 'number')
+                        errorMessage.status = HttpStatus[err?.status]
+
+                    if (process.env.APP_PROD === 'DEVELOP' && err?.err)
+                        Object.assign(errorMessage, {err: err.err});
+
                     return throwError(new RpcException(errorMessage));
+
                 }),
             );
     }

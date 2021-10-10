@@ -30,14 +30,12 @@ export function main(options: EntityOptions): Rule {
 
         return chain([
             mergeWith(generateEndPoint(options)),
-            //mergeWith(generateRepository(options))
         ]);
     };
 }
 
 function generateEndPoint(options) {
-
-    return apply(url('./files'), [
+    return apply(url('./files/'+options.typeController), [
         applyTemplates({
             classify: strings.classify,
             dasherize: strings.dasherize,

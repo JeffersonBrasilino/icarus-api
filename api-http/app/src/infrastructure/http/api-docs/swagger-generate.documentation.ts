@@ -2,8 +2,8 @@ import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {NestExpressApplication} from "@nestjs/platform-express";
 
 export class SwaggerGenerateDocumentation {
-    private _title: string = 'MedClub API';
-    private _description: string = 'API em node do MedClub';
+    private _title: string = 'icarus API';
+    private _description: string = 'API em node do icarus';
     private _app: NestExpressApplication
 
     constructor(app: NestExpressApplication) {

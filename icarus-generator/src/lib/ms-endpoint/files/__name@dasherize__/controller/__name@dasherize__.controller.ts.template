@@ -6,7 +6,7 @@ import {Controller} from "@nestjs/common";
 
 @Controller()
 export class <%= classify(name) %>Controller extends BaseController {
-    private static BASE_PATTERN: string = '<%= route %>';
+    private static BASE_PATTERN: string = `${process.env.APP_BASE_PATTERN_MESSAGE}/<%= route %>`;
 
     constructor(private _service: <%= classify(name) %>Service) {
         super(_service);
@@ -14,8 +14,7 @@ export class <%= classify(name) %>Controller extends BaseController {
 
     @MessagePattern(`LIST:${<%= classify(name) %>Controller.BASE_PATTERN}`)
     async lista(@Payload() data: any, @Ctx() c:NatsContext): Promise<any> {
-        const a = await super.list(data);
-        return a;
+        return await super.list(data);
     }
 
     @MessagePattern(`GET:${<%= classify(name) %>Controller.BASE_PATTERN}`)
@@ -24,9 +23,14 @@ export class <%= classify(name) %>Controller extends BaseController {
     }
 
     @MessagePattern(`SAVE:${<%= classify(name) %>Controller.BASE_PATTERN}`)
-    async save(@Payload('data') data: Save<%= classify(name) %>Dto, @Payload('id') id?: number | string) {
-        return await super.save(data, id);
+    async save(@Payload('data') data: Save<%= classify(name) %>Dto) {
+        return await super.save(data);
     }
+
+     @MessagePattern(`UPDATE:${<%= classify(name) %>Controller.BASE_PATTERN}`)
+     async update(@Payload('data') data: Save<%= classify(name) %>Dto, @Payload('id') id: number | string) {
+        return await super.update(data, id);
+     }
 
     @MessagePattern(`DELETE:${<%= classify(name) %>Controller.BASE_PATTERN}`)
     async delete(@Payload('id') id: number | string) {

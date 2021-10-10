@@ -1,6 +1,7 @@
 import { Path } from '@angular-devkit/core';
 
 export interface EntityOptions {
+    typeController: string;
     /**
      * The name of the controller.
      */

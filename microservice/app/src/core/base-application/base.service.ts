@@ -10,7 +10,7 @@ export abstract class BaseService {
             else
                 return {status: 'NOT_FOUND', data: []}
         } catch (e) {
-            return {status: 'INTERNAL_SERVER_ERROR', data: 'houve um problema, tente novamente mais tarde.'}
+            throw {status: 'INTERNAL_SERVER_ERROR', err: e.toString()};
         }
     }
 
@@ -22,20 +22,30 @@ export abstract class BaseService {
             else
                 return {status: 'NOT_FOUND', data: []}
         } catch (e) {
-            return {status: 'INTERNAL_SERVER_ERROR', data: 'houve um problema, tente novamente mais tarde.'}
+            throw {status: 'INTERNAL_SERVER_ERROR', err: e.toString()};
         }
     }
 
     async save(dados: any, id?: number) {
         try {
+            const res = await this._baseRepo.save(dados);
+            return {status: 'CREATED', data: {id: res.id}};
+        } catch (e) {
+            throw {status: 'INTERNAL_SERVER_ERROR', err: e.toString()};
+        }
+    }
+
+    async update(dados: any, id: number | string) {
+        try {
             const check = await this._baseRepo.get(id);
             if (check.length > 0) {
                 const res = await this._baseRepo.save(dados, id);
-                return {status: id ? 'OK' : 'CREATED', data: {id: res.id}};
-            } else
+                return {status: 'OK', data: {id: res.id}};
+            } else {
                 return {status: 'NOT_FOUND', data: 'registro não encontrado.'}
+            }
         } catch (e) {
-            return {status: 'INTERNAL_SERVER_ERROR', data: 'houve um problema, tente novamente mais tarde.'}
+            throw {status: 'INTERNAL_SERVER_ERROR', err: e.toString()};
         }
     }
 
@@ -49,7 +59,7 @@ export abstract class BaseService {
                 return {status: 'NOT_FOUND', data: []}
             }
         } catch (e) {
-            return {status: 'INTERNAL_SERVER_ERROR', data: 'houve um problema, tente novamente mais tarde.'}
+            throw new Error(JSON.stringify({status: 'INTERNAL_SERVER_ERROR', err: e.toString()}));
         }
     }
 }

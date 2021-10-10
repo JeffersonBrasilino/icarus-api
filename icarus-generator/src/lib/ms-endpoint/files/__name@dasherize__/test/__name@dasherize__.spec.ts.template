@@ -1,0 +1,118 @@
+import {Test, TestingModule} from "@nestjs/testing";
+import {<%= classify(name) %>Module} from "@applications/<%= route %>/<%= dasherize(name) %>.module";
+import {<%= classify(name) %>Controller} from "@applications/<%= route %>/controller/<%= dasherize(name) %>.controller";
+import {Save<%= classify(name) %>Dto} from "@applications/<%= route %>/dto/save-<%= dasherize(name) %>.dto";
+let controller!: <%= classify(name) %>Controller;
+let messagePatternTesting = '/<%= route %>';
+const mockRepo = {
+    list: (page, filter) => {
+        if (filter.description == 'notExists')
+            return {rows: null};
+        else
+            return {rows: [1, 2]};
+    },
+    get: (id) => {
+        if (id == 3) {
+            return ['hue'];
+        } else {
+            return [];
+        }
+    },
+    save: (dados, id) => {
+        if (id == undefined)
+            return {id: null}
+        else
+            return {id: 999999};
+    },
+    delete: (id) => {
+        if (id == 3)
+            return {affected: 1}
+        else
+            return {affected: 0}
+    }
+};
+
+//dados a ser enviado para a funcao
+const requestData: Save<%= classify(name) %>Dto = {
+    "description": "teste"
+}
+
+
+beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+        imports: [<%= classify(name) %>Module]
+    })
+    //para mockar o repositorio no service
+        //.overrideProvider('ICompaniesGroupsRepository')
+        //.useValue(mockRepo)
+        .compile();
+    controller = await moduleFixture.resolve(<%= classify(name) %>Controller)
+});
+
+describe(`LIST:${messagePatternTesting}`, () => {
+    it(`quando acessar a LISTAGEM, listar e retornar OK`, async () => {
+        expect(await controller.list({}))
+            .toHaveProperty('status', 'OK');
+    });
+
+    it(`quando acessar a LISTAGEM com filtros que nao existem registro, retornar NOT_FOUND`, async () => {
+        expect(await controller.list({description: 'notExists'}))
+            .toHaveProperty('status', 'NOT_FOUND');
+    });
+});
+
+describe(`GET:${messagePatternTesting}`, () => {
+    it(`quando acessar um id que existe , retornar OK`, async () => {
+        expect(await controller.get(3))
+            .toHaveProperty('status', 'OK');
+    });
+
+    it(`quando acessar um id NÃO que existe , retornar NOT_FOUND`, async () => {
+        expect(await controller.get(999))
+            .toHaveProperty('status', 'NOT_FOUND');
+    });
+});
+
+describe(`SAVE:${messagePatternTesting}`, () => {
+    it('quando tentar salvar os dados com dados enviados, retorna CREATED', async () => {
+        expect(await controller.save(requestData))
+            .toHaveProperty('status', 'CREATED');
+    });
+
+   /* it('quando tentar salvar sem dados enviados retorna BAD_REQUEST', async () => {
+        expect(await controller.save({descriptio: 'hue'}))
+            .toHaveProperty('status', 'BAD_REQUEST');
+    })*/
+});
+
+describe(`UPDATE:${messagePatternTesting}`, () => {
+    it('quando tentar atualizar os dados com dados enviados, retorna OK', async () => {
+        expect(await controller.update(requestData,3))
+            .toHaveProperty('status', 'OK');
+    });
+
+    /*it('quando tentar atualizar sem dados enviados retorna 400', async () => {
+        return request(app.getHttpServer())
+            .put('/administration/companies/groups/3')
+            .set('Authorization', `Bearer ${token}`)
+            .set('Accept', 'application/json')
+            .expect(400)
+    });*/
+
+    it('quando tentar atualizar com dados enviados e sem ID retorna NOT_FOUND', async () => {
+        expect(await controller.update(requestData,undefined))
+            .toHaveProperty('status', 'NOT_FOUND');
+    });
+});
+
+describe(`DELETE:${messagePatternTesting}`, () => {
+    it('quando tentar deletar com ID, retorna OK', async () => {
+        expect(await controller.delete(3))
+            .toHaveProperty('status', 'OK');
+    });
+
+    it('quando tentar deletar sem ID, retorna NOT_FOUND', async () => {
+        expect(await controller.delete(999))
+            .toHaveProperty('status', 'NOT_FOUND');
+    });
+});

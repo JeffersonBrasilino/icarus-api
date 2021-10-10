@@ -59,7 +59,7 @@ export class UserService {
                     const opt: SendEmailOptions = {
                         from: 'jefferson.wendhel@gmail.com',
                         to: email,
-                        subject: 'Código de verificação - recuperar senha MedClub',
+                        subject: 'Código de verificação - recuperar senha icarus',
                         html: `código de verificação: <b>${verificationCode}</b>`,
                     };
                     const sendEmailStatus = await this.email.sendEmail(opt);

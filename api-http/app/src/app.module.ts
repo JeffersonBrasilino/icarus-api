@@ -1,14 +1,14 @@
-import { Module} from '@nestjs/common';
+import {Module} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {TypeormConnection} from "@infrastructure/database/typeorm/connection/typeorm.connection";
-import {OpenRoutesStrategy} from "@infrastructure/http/guards/open-routes/authentication/open-routes.strategy";
-import {AuthRoutesStrategy} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.strategy";
 import {ApplicationsModule} from "@applications/applications.module";
-import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
-import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
+import {TypeormConnection} from "@infrastructure/database/typeorm/connection/typeorm.connection";
+import {AuthRoutesStrategy} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.strategy";
+import {OpenRoutesStrategy} from "@infrastructure/http/guards/open-routes/authentication/open-routes.strategy";
 import {AuthorizationGuard} from "@infrastructure/http/guards/auth-routes/authorization/authorization.guard";
+import {AuthRoutesGuard} from "@infrastructure/http/guards/auth-routes/authentication/auth-routes.guard";
+import {OpenRoutesGuard} from "@infrastructure/http/guards/open-routes/authentication/open-routes.guard";
 import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
 import {NatsResponseExceptionInterceptor} from "@infrastructure/http/interceptors/nats-response-exception.interceptor";
 
@@ -16,7 +16,7 @@ import {NatsResponseExceptionInterceptor} from "@infrastructure/http/interceptor
     imports: [
         ApplicationsModule,
         TypeOrmModule.forRootAsync({
-            useFactory: () =>({}),
+            useFactory: () => ({}),
             connectionFactory: async () => {
                 return TypeormConnection.connect();
             }
@@ -25,8 +25,8 @@ import {NatsResponseExceptionInterceptor} from "@infrastructure/http/interceptor
     controllers: [AppController],
     providers: [
         AppService,
-        OpenRoutesStrategy,
         AuthRoutesStrategy,
+        OpenRoutesStrategy,
         {
             provide: APP_GUARD,
             useClass: OpenRoutesGuard
@@ -45,5 +45,5 @@ import {NatsResponseExceptionInterceptor} from "@infrastructure/http/interceptor
         },
     ],
 })
-export class AppModule{
+export class AppModule {
 }

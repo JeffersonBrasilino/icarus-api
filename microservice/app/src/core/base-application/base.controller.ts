@@ -6,11 +6,14 @@ export abstract class BaseController {
         return this._baseService.save(data, id);
     }
 
+    update(data: any, id: number | string) {
+        return this._baseService.update(data, id);
+    }
+
     list(query): Promise<any> {
         const page = query?.page ?? 1;
         delete query.page;
         return this._baseService.list(page, query);
-
     }
 
     get(id: number | string): Promise<any> {

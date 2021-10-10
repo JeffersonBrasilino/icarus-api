@@ -1,15 +1,15 @@
 import {Injectable, CanActivate, ExecutionContext, Inject} from '@nestjs/common';
 import {PUBLIC_ROUTE} from "@infrastructure/http/decorators/public-route";
 import {Reflector} from "@nestjs/core";
-import {UserService} from "@applications/auth/user/service/user.service";
-import {ApplicationService} from "@applications/auth/application/service/application.service";
+//import {UserService} from "@applications/auth/user/service/user.service";
+//import {ApplicationService} from "@applications/auth/application/service/application.service";
 import {LogsService} from "@applications/logs/service/logs.service";
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
     constructor(private reflector: Reflector,
-                private authUserService: UserService,
-                private authApplicationService: ApplicationService,
+                private authUserService: any,
+                private authApplicationService: any,
                 private logsService: LogsService
     ) {
     }

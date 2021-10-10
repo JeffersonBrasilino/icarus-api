@@ -25,7 +25,7 @@ export class NodemailerEmail implements IsendEmail {
                 }
             })
         } else {
-            console.error('credenciais de smtp incorretas ou não existem no arquivo env.');
+            throw Error('credenciais de smtp incorretas ou não existem no arquivo env.');
         }
     }
 
