@@ -1,17 +1,23 @@
-import {Connection, createConnection, getConnection, getConnectionManager} from "typeorm";
+import {Connection, createConnection, createConnections, getConnection, getConnectionManager} from "typeorm";
+
+const ormConfig = require('../../../../../ormconfig');
 
 export class TypeormConnection {
     private static CONNECTION_NAME = process.env.APP_DB_CONNECTION_NAME ?? 'default';
 
     static async connect(name?: string): Promise<Connection> {
-        name = name ?? this.CONNECTION_NAME;
-        this.CONNECTION_NAME = name ?? this.CONNECTION_NAME;
-        if (!getConnectionManager().has(this.CONNECTION_NAME)) {
-            return await createConnection(this.CONNECTION_NAME);
-        }
+        await createConnections(ormConfig);
+
+        return this.getConnection(name);
     }
 
-    static getConnection(): Connection {
-        return getConnection(this.CONNECTION_NAME);
+    static getConnection(connectionName?: string): Connection {
+        connectionName = connectionName ?? this.CONNECTION_NAME;
+        const ormConfigIndex = ormConfig.findIndex(oc => oc.name = connectionName);
+        if (ormConfigIndex !== -1) {
+            return getConnection(connectionName);
+        } else {
+            throw (`CONEXÃO ${connectionName} NÃO EXISTE NO ARQUIVO ormconfig.js`);
+        }
     }
 }
